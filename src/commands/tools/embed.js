@@ -7,7 +7,7 @@ module.exports = {
     async execute(interaction, client) {
         const embed = new EmbedBuilder()
         .setTitle('This is an EMBED!')
-        .setDescription('hate niggas')
+        .setDescription(':3')
         .setColor(0x18e1ee)
         .setImage(client.user.displayAvatarURL())
         .setThumbnail(client.user.displayAvatarURL())
