@@ -6,10 +6,10 @@ module.exports = {
         .setDescription('Plays a specified song from YouTube or Spotify')
         .addStringOption((option) =>
         option
-          .setName('song')
-          .setDescription('The song you\'d like to play')
-          .setRequired(true)),
+            .setName('song')
+            .setDescription('The song you\'d like to play')
+            .setRequired(true)),
     async execute(interaction, client) {
-      
+        
     },
 };

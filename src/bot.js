@@ -20,6 +20,7 @@ const config = require('../config.json');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const cron = require('node-cron');
+const { joinVoiceChannel } = require('@discordjs/voice');
 
 client.config = require('../config.json');
 client.distube = new DisTube(client, {
@@ -35,6 +36,17 @@ client.distube = new DisTube(client, {
     ]
 })
 
+let guild, voiceChannel;
+
+client.on('ready', async () => {
+    try {
+        guild = await client.guilds.fetch(config.guildId);
+        voiceChannel = guild.channels.cache.get(config.voiceId);
+    } catch(error) {
+        console.log(error);
+    }
+})
+
 client.commands = new Discord.Collection();
 client.aliases = new Discord.Collection();
 client.commandArray = [];
@@ -44,15 +56,18 @@ const task = cron.schedule('0 0 */1 * * *', async() => {
 
     if (voiceChannel.members.size >= 1) {
         try {
-            const connection = await voiceChannel.join();
+            const connection = joinVoiceChannel({
+                channelId: config.voiceId,
+                guildId: config.guildId,
+            });
             let count = 1;
 
-            (function play(Client) {
-                connection.play('../bigben.mp3')
+            (function play(client) {
+                connection.play('./src/media/sounds/bigben.mp3')
                 .on('finish', () => {
                     count += 1;
                     if (count <= hour && config.matchDingsWithHour == 'true') {
-                        play(Client);
+                        play(client);
                     } else {
                         connection.disconnect();
                     }
@@ -65,18 +80,20 @@ const task = cron.schedule('0 0 */1 * * *', async() => {
 });
 
 const getTimeInfo = () => {
-    let time = new Date();
-    let hour = time.getHours() >= 12 ? time.getHours() - 12 : time.getHours();
-    hour = hour === 0 ? 12 : hour;
-    let amPm = time.getHours() >= 12 ? 'PM' : 'AM';
-    let gmtOffset = time.getTimezoneOffset() / 60;
-    let timezoneOffsetString = `${gmtOffset > 0 ? '-':'+'} ${Math.abs(gmtOffset)}`;
+		let time = new Date();
+		let hour = time.getHours() >= 12 ? time.getHours() - 12 : time.getHours();
+		hour = hour === 0 ? 12 : hour;
+		let amPm = time.getHours() >= 12 ? 'PM' : 'AM';
+		// get gmt offset in minutes and convert to hours
+		let gmtOffset = time.getTimezoneOffset() / 60
+		// turn gmt offset into a string representing the timezone in its + or - gmt offset
+		let timezoneOffsetString = `${gmtOffset > 0 ? '-':'+'} ${Math.abs(gmtOffset)}`;
 
-    return {
-        hour,
-        amPm,
-        timezoneOffsetString
-    }
+	return {
+		hour,
+		amPm,
+		timezoneOffsetString
+	}
 }
 
 const functionFolders = fs.readdirSync(`./src/functions`);
