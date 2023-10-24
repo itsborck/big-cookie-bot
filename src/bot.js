@@ -20,7 +20,7 @@ const config = require('../config.json');
 const { SpotifyPlugin } = require('@distube/spotify');
 const { YtDlpPlugin } = require('@distube/yt-dlp');
 const cron = require('node-cron');
-const { joinVoiceChannel } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
 
 client.config = require('../config.json');
 client.distube = new DisTube(client, {
@@ -54,17 +54,21 @@ client.commandArray = [];
 const task = cron.schedule('0 0 */1 * * *', async() => {
     let { hour, amPm, timezoneOffsetString } = getTimeInfo();
 
-    if (voiceChannel.members.size >= 1) {
+    if (voiceChannel && voiceChannel.members.size >= 1) {
         try {
+            const player = createAudioPlayer();
             const connection = joinVoiceChannel({
                 channelId: config.voiceId,
                 guildId: config.guildId,
                 adapterCreator: guild.voiceAdapterCreator,
+                selfDeaf: false,
             });
-            let count = 1;
+
+            const audioResource = createAudioResource('./src/media/sounds/bigben.mp3');
 
             (function play(client) {
-                connection.play('./src/media/sounds/bigben.mp3')
+                player.play(audioResource)
+                connection.subscribe(player)
                 .on('finish', () => {
                     count += 1;
                     if (count <= hour && config.matchDingsWithHour == 'true') {
