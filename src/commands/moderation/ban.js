@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -14,7 +14,8 @@ module.exports = {
       option
         .setName('reason')
         .setDescription('The reason for banning the user.')
-    ),
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.BanMembers),
   async execute(interaction, client) {
     const user = interaction.options.getUser('target');
     const member = await interaction.guild.members

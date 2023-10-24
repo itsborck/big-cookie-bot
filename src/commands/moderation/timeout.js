@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, PermissionFlagsBits, EmbedBuilder, PermissionsBitField } = require('discord.js');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -22,7 +22,8 @@ module.exports = {
       option
         .setName('reason')
         .setDescription('The reason for timing out the user.')
-    ),
+    )
+    .setDefaultMemberPermissions(PermissionFlagsBits.ModerateMembers),
   async execute(interaction, client) {
     const user = interaction.options.getUser('target');
     let reason = interaction.options.getString('reason');
