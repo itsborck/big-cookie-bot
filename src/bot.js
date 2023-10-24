@@ -59,6 +59,7 @@ const task = cron.schedule('0 0 */1 * * *', async() => {
             const connection = joinVoiceChannel({
                 channelId: config.voiceId,
                 guildId: config.guildId,
+                adapterCreator: guild.voiceAdapterCreator,
             });
             let count = 1;
 
