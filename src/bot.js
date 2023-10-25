@@ -1,5 +1,4 @@
 const Discord = require('discord.js');
-const { DisTube } = require('distube');
 
 const client = new Discord.Client({
     partials: [
@@ -17,24 +16,10 @@ const client = new Discord.Client({
 
 const fs = require('node:fs');
 const config = require('../config.json');
-const { SpotifyPlugin } = require('@distube/spotify');
-const { YtDlpPlugin } = require('@distube/yt-dlp');
 const cron = require('node-cron');
 const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
 
 client.config = require('../config.json');
-client.distube = new DisTube(client, {
-    leaveOnStop: false,
-    emitNewSongOnly: true,
-    emitAddSongWhenCreatingQueue: false,
-    emitAddListWhenCreatingQueue: false,
-    plugins: [
-        new SpotifyPlugin({
-            emitEventsAfterFetching: true,
-        }),
-        new YtDlpPlugin(),
-    ]
-})
 
 let guild, voiceChannel;
 
