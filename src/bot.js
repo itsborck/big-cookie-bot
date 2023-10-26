@@ -59,7 +59,7 @@ const task = cron.schedule('0 0 */1 * * *', async() => {
                     if (count <= hour && config.matchDingsWithHour == 'true') {
                         play(client);
                     } else {
-                        connection.disconnect();
+                        connection.destroy();
                     }
                 })
             })();
