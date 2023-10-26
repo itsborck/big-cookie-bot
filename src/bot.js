@@ -23,6 +23,14 @@ client.config = require('../config.json');
 
 let guild, voiceChannel;
 
+const status = [
+	{
+		name: 'bigcookie.org',
+		type: Discord.ActivityType.Watching,
+		url: 'https://bigcookie.org',
+	},
+];
+
 client.on('ready', async () => {
 	try {
 		guild = await client.guilds.fetch(config.guildId);
@@ -31,6 +39,7 @@ client.on('ready', async () => {
 	catch (error) {
 		console.log(error);
 	}
+	client.user.setActivity(status[0].name, { type: status[0].type, url: status[0].url });
 });
 
 client.commands = new Discord.Collection();

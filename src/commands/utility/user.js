@@ -1,4 +1,4 @@
-const { SlashCommandBuilder } = require('discord.js');
+const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
 
 module.exports = {
 	data: new SlashCommandBuilder()
@@ -8,5 +8,7 @@ module.exports = {
 		// interaction.user is the object representing the user who sent the command
 		// interaction.member is the GuildMember object, which represents the user in the specified guild
 		await interaction.reply(`This command was run by ${interaction.user.username}, who joined on ${interaction.member.joinedAt}.`);
+		console.log(interaction.member);
+		console.log(interaction.user);
 	},
 };
