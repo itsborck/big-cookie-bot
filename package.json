@@ -19,6 +19,7 @@
     "@distube/ytdl-core": "^4.13.2",
     "@distube/ytpl": "^1.2.1",
     "@distube/ytsr": "^1.2.0",
+    "axios": "^1.6.0",
     "chalk": "^4.1.2",
     "discord-api-types": "^0.37.38",
     "discord.js": "^14.12.1",
