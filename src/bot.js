@@ -17,7 +17,7 @@ const client = new Discord.Client({
 const fs = require('node:fs');
 const config = require('../config.json');
 const cron = require('node-cron');
-const { joinVoiceChannel, createAudioPlayer, createAudioResource } = require('@discordjs/voice');
+const { joinVoiceChannel, createAudioPlayer, createAudioResource, AudioPlayerStatus } = require('@discordjs/voice');
 
 client.config = require('../config.json');
 
@@ -60,16 +60,12 @@ const task = cron.schedule('0 0 */1 * * *', async () => {
 
 			const audioResource = createAudioResource('./src/media/sounds/bigben.mp3');
 
-			(function play() {
-				player.play(audioResource);
-				connection.subscribe(player)
-					.on('finish', () => {
-						{
-							play(client);
-							connection.disconnect();
-						}
-					});
-			})();
+			connection.subscribe(player);
+			player.play(audioResource);
+
+			player.on(AudioPlayerStatus.Idle, () => {
+				connection.destroy();
+			});
 		}
 		catch (error) {
 			console.log(error);
